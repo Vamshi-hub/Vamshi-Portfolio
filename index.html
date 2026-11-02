@@ -568,10 +568,8 @@
   <script>
     const activeSections = [...document.querySelectorAll("main section[id]")];
     const sectionLinks = [...document.querySelectorAll('.nav a[href^="#"]')];
-    let activeNavFrame = 0;
 
     const updateActiveNav = () => {
-      activeNavFrame = 0;
       const marker = document.querySelector(".topbar").getBoundingClientRect().height + window.innerHeight * 0.28;
       let activeSection = activeSections[0];
 
@@ -593,12 +591,8 @@
       }
     };
 
-    const scheduleActiveNavUpdate = () => {
-      if (!activeNavFrame) activeNavFrame = window.requestAnimationFrame(updateActiveNav);
-    };
-
-    window.addEventListener("scroll", scheduleActiveNavUpdate, { passive: true });
-    window.addEventListener("resize", scheduleActiveNavUpdate);
+    window.addEventListener("scroll", updateActiveNav, { passive: true });
+    window.addEventListener("resize", updateActiveNav);
     updateActiveNav();
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
