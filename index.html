@@ -87,19 +87,31 @@
     .topbar-controls { display: flex; align-items: center; gap: 20px; }
 
     .theme-toggle {
+      display: inline-flex;
       flex-shrink: 0;
+      width: 64px;
       min-height: 40px;
-      padding: 8px 12px;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
       border: 1px solid var(--line);
-      border-radius: 6px;
+      border-radius: 999px;
       background: var(--surface);
       color: var(--text);
-      font: inherit;
-      font-size: .82rem;
       cursor: pointer;
     }
-    .theme-toggle:hover { border-color: var(--accent); color: var(--accent-strong); }
+    .theme-toggle:hover { border-color: var(--accent); }
     .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .theme-toggle-track { position: relative; display: block; width: 54px; height: 30px; border-radius: 999px; background: var(--surface-raised); }
+    .theme-toggle-icon { position: absolute; top: 7px; display: grid; width: 16px; height: 16px; place-items: center; color: var(--muted); }
+    .theme-toggle-icon svg, .theme-toggle-thumb svg { display: block; width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+    .theme-toggle-icon--moon { left: 6px; }
+    .theme-toggle-icon--sun { right: 6px; }
+    .theme-toggle-thumb { position: absolute; top: 2px; left: 2px; display: grid; width: 26px; height: 26px; place-items: center; border-radius: 50%; background: var(--accent); color: var(--button-text); transition: transform .2s ease; }
+    .theme-toggle-thumb .theme-toggle-sun { display: none; }
+    :root[data-theme="light"] .theme-toggle-thumb { transform: translateX(24px); }
+    :root[data-theme="light"] .theme-toggle-thumb .theme-toggle-moon { display: none; }
+    :root[data-theme="light"] .theme-toggle-thumb .theme-toggle-sun { display: block; }
 
     .hero {
       display: grid;
@@ -298,7 +310,6 @@
       .nav { gap: 8px; }
       .nav a { font-size: .76rem; }
       .brand { font-size: .78rem; }
-      .theme-toggle { padding-inline: 9px; font-size: .76rem; }
       .quick-facts { grid-template-columns: 1fr; }
       .fact, .fact + .fact { padding: 15px 0; border-left: 0; }
       .fact + .fact { border-top: 1px solid var(--line); }
@@ -340,7 +351,16 @@
         <a href="#experience">Experience</a>
         <a href="#contact">Contact</a>
       </nav>
-      <button class="theme-toggle" type="button" aria-label="Switch to light theme">Light theme</button>
+      <button class="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch to light theme">
+        <span class="theme-toggle-track" aria-hidden="true">
+          <span class="theme-toggle-icon theme-toggle-icon--moon"><svg viewBox="0 0 24 24"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z"/></svg></span>
+          <span class="theme-toggle-icon theme-toggle-icon--sun"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></span>
+          <span class="theme-toggle-thumb">
+            <svg class="theme-toggle-moon" viewBox="0 0 24 24"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z"/></svg>
+            <svg class="theme-toggle-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+          </span>
+        </span>
+      </button>
     </div>
   </header>
 
@@ -523,8 +543,8 @@
       const nextTheme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
       document.documentElement.dataset.theme = nextTheme;
       const targetTheme = nextTheme === "dark" ? "light" : "dark";
-      themeToggle.textContent = `${targetTheme === "light" ? "Light" : "Dark"} theme`;
       themeToggle.setAttribute("aria-label", `Switch to ${targetTheme} theme`);
+      themeToggle.title = `Switch to ${targetTheme} theme`;
       document.querySelector('meta[name="theme-color"]').content = nextTheme === "light" ? "#ede3d8" : "#101511";
     });
   </script>
